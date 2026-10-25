@@ -4,6 +4,7 @@
   font-size: 0.92rem;
   display: block;
   overflow-x: auto;
+  position: relative; /* keeps the visually hidden header cell inside the scroll area */
 }
 
 .table caption {
@@ -45,4 +46,15 @@
   border-radius: var(--radius);
   background: var(--surface);
   font-weight: 600;
+}
+
+@media (max-width: 520px) {
+  .hideSmall {
+    display: none;
+  }
+  .table th,
+  .table td {
+    white-space: normal;
+    padding-right: 6px;
+  }
 }

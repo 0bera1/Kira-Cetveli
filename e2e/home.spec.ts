@@ -98,3 +98,45 @@ test('client-side navigation never requests build-hashed loader files', async ({
   expect(loaderRequests).toEqual([])
   expect(errors).toEqual([])
 })
+
+test('home page offers the last 12 months in a drawer that applies a month and closes', async ({
+  page,
+}) => {
+  await page.goto('/')
+  const toggle = page.getByRole('button', { name: /Son 12 ayın oranları/ })
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  await expect(page.locator('tbody tr').first()).toBeHidden()
+  await toggle.click()
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+  await expect(page.locator('tbody tr')).toHaveCount(12)
+  await page.locator('tbody tr').nth(1).getByRole('button', { name: 'Kullan' }).click()
+  await expect(page.getByLabel('Uygulanacak artış oranı')).toHaveValue('31,79')
+  await expect(page.getByTestId('new-rent')).toHaveText('₺13.179,00')
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  await toggle.click()
+  await expect(page.locator('tbody tr[aria-selected="true"]')).toContainText('Eylül 2026')
+})
+
+test('opening the rates drawer never causes horizontal scroll', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: /Son 12 ayın oranları/ }).click()
+  for (const w of [360, 390, 768, 1280]) {
+    await page.setViewportSize({ width: w, height: 900 })
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    )
+    expect(overflow, `width ${w}`).toBe(false)
+  }
+})
+
+test('on a phone the drawer shows the use buttons without sideways scrolling', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 })
+  await page.goto('/')
+  await page.getByRole('button', { name: /Son 12 ayın oranları/ }).click()
+  const button = page.locator('tbody tr').first().getByRole('button', { name: 'Kullan' })
+  await button.scrollIntoViewIfNeeded()
+  const box = (await button.boundingBox())!
+  expect(box.x).toBeGreaterThanOrEqual(0)
+  expect(box.x + box.width).toBeLessThanOrEqual(360)
+  expect(box.height).toBeGreaterThanOrEqual(44)
+})

@@ -20,9 +20,13 @@ export function RateTable({
       <thead>
         <tr>
           <th scope="col">Yenileme ayı</th>
-          <th scope="col">Veri ayı</th>
+          <th scope="col" className={styles.hideSmall}>
+            Veri ayı
+          </th>
           <th scope="col">Oran</th>
-          <th scope="col">Kaynak</th>
+          <th scope="col" className={styles.hideSmall}>
+            Kaynak
+          </th>
           {onSelect && (
             <th scope="col" className="visually-hidden">
               Seç
@@ -34,9 +38,11 @@ export function RateTable({
         {options.map((o) => (
           <tr key={o.renewalMonth} aria-selected={selected === o.renewalMonth || undefined}>
             <th scope="row">{formatMonth(o.renewalMonth)}</th>
-            <td>{formatMonth(o.dataMonth)}</td>
+            <td className={styles.hideSmall}>{formatMonth(o.dataMonth)}</td>
             <td className={styles.num}>{formatPercent(o.rate)}</td>
-            <td>{o.source === 'announced' ? 'Açıklanan' : 'Endeksten hesaplanan'}</td>
+            <td className={styles.hideSmall}>
+              {o.source === 'announced' ? 'Açıklanan' : 'Endeksten hesaplanan'}
+            </td>
             {onSelect && (
               <td>
                 <button type="button" onClick={() => onSelect(o.renewalMonth)}>

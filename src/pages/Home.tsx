@@ -3,6 +3,7 @@ import { Checklist } from '../components/Checklist'
 import { Faq, type FaqItem } from '../components/Faq'
 import { Field, Paper } from '../components/Paper'
 import { formatMonth, ResultNotice } from '../components/Notices'
+import { RateDrawer } from '../components/RateDrawer'
 import { RulerGauge } from '../components/RulerGauge'
 import { Seo } from '../components/Seo'
 import { computeIncrease } from '../lib/rent/increase'
@@ -89,6 +90,11 @@ export default function Home() {
               onChange={setRateOverride}
               suffix="%"
               hint={rateHint}
+            />
+            <RateDrawer
+              options={choice.options}
+              selected={choice.selected}
+              onSelect={choice.setSelected}
             />
             <RulerGauge value={rate} />
             <div className={styles.result} aria-live="polite">

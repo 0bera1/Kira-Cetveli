@@ -11,6 +11,7 @@ const paths = {
   map: 'M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14',
   search: 'M11 4a7 7 0 100 14 7 7 0 000-14zM20 20l-4-4',
   arrow: 'M5 12h14M13 6l6 6-6 6',
+  chevron: 'M6 9l6 6 6-6',
 } as const
 
 export type IconName = keyof typeof paths

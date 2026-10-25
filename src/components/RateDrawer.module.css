@@ -1,0 +1,33 @@
+.drawer {
+  margin: 4px 0 8px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+
+.toggle {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  font-weight: 600;
+  text-align: left;
+}
+
+.chevron {
+  display: inline-grid;
+  transition: transform 0.2s ease;
+}
+
+.chevron[data-open='true'] {
+  transform: rotate(180deg);
+}
+
+.panel {
+  padding: 4px 14px 12px;
+  border-top: 1px dashed var(--line);
+}
