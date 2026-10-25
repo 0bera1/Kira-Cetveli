@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 import { DataProvider } from '../lib/data/DataContext'
 import { RoleProvider, useRole, type Role } from '../lib/role'
 import { useTheme } from '../lib/theme'
@@ -10,6 +10,13 @@ const roles: { id: Role; label: string }[] = [
   { id: 'landlord', label: 'Ev sahibiyim' },
 ]
 
+const navLinks = [
+  { to: '/araclar', label: 'Araçlar' },
+  { to: '/veri-kaynaklari', label: 'Veri kaynakları' },
+  { to: '/gizlilik', label: 'Gizlilik' },
+  { to: '/hakkinda', label: 'Hakkında' },
+]
+
 function TopBar() {
   const [role, setRole] = useRole()
   const [theme, toggleTheme] = useTheme()
@@ -18,6 +25,13 @@ function TopBar() {
       <Link to="/" className={styles.logo} aria-label="Kira Cetveli ana sayfa">
         Kira<span>Cetveli</span>
       </Link>
+      <nav className={styles.nav} aria-label="Ana gezinti">
+        {navLinks.map((l) => (
+          <NavLink key={l.to} to={l.to}>
+            {l.label}
+          </NavLink>
+        ))}
+      </nav>
       <div className={styles.controls}>
         <div className={styles.segment} role="group" aria-label="Rolünüz">
           {roles.map((r) => (
@@ -56,10 +70,11 @@ export function Layout() {
           </main>
           <footer className={styles.footer} data-noprint>
             <nav aria-label="Alt bağlantılar">
-              <Link to="/araclar">Araçlar</Link>
-              <Link to="/veri-kaynaklari">Veri kaynakları</Link>
-              <Link to="/gizlilik">Gizlilik</Link>
-              <Link to="/hakkinda">Hakkında</Link>
+              {navLinks.map((l) => (
+                <Link key={l.to} to={l.to}>
+                  {l.label}
+                </Link>
+              ))}
             </nav>
             <p>Girdiğiniz rakamlar cihazınızdan çıkmaz. Bu site hukuki danışmanlık vermez.</p>
           </footer>

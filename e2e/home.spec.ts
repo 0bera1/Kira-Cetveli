@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 
+const ORIGIN = process.env.E2E_BASE_URL ?? 'http://localhost:4173'
+
 test('default values give the expected result', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByTestId('new-rent')).toHaveText(/13\.149,00/)
@@ -24,7 +26,7 @@ test('theme toggles and persists', async ({ page }) => {
 test('no external requests and no horizontal scroll', async ({ page }) => {
   const external: string[] = []
   page.on('request', (r) => {
-    if (!r.url().startsWith('http://localhost:4173')) external.push(r.url())
+    if (!r.url().startsWith(ORIGIN)) external.push(r.url())
   })
   for (const w of [390, 768, 1280]) {
     await page.setViewportSize({ width: w, height: 900 })
@@ -50,5 +52,32 @@ test('screenshots', async ({ page }) => {
       await page.waitForTimeout(300)
       await page.screenshot({ path: `shots/home-${w}-${theme}.png`, fullPage: true })
     }
+  }
+})
+
+test('header navigation mirrors the footer and marks the current page', async ({ page }) => {
+  await page.goto('/')
+  const header = page.getByRole('navigation', { name: 'Ana gezinti' })
+  for (const name of ['Araçlar', 'Veri kaynakları', 'Gizlilik', 'Hakkında']) {
+    await expect(header.getByRole('link', { name })).toBeVisible()
+    await expect(
+      page.getByRole('navigation', { name: 'Alt bağlantılar' }).getByRole('link', { name }),
+    ).toBeVisible()
+  }
+  await header.getByRole('link', { name: 'Gizlilik' }).click()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Gizlilik')
+  await expect(header.getByRole('link', { name: 'Gizlilik' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  )
+  for (const w of [390, 768, 1280]) {
+    await page.setViewportSize({ width: w, height: 900 })
+    const box = await header.getByRole('link', { name: 'Hakkında' }).boundingBox()
+    expect(box!.height).toBeGreaterThanOrEqual(44)
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      ),
+    ).toBe(false)
   }
 })

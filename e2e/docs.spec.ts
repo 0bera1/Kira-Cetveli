@@ -1,4 +1,6 @@
 import { readFileSync } from 'node:fs'
+
+const ORIGIN = process.env.E2E_BASE_URL ?? 'http://localhost:4173'
 import { expect, test } from '@playwright/test'
 
 test('increase notice downloads a non-empty PDF', async ({ page }) => {
@@ -68,7 +70,7 @@ test('user input never leaves the browser', async ({ page }) => {
   await page.getByRole('button', { name: 'PDF indir' }).click()
   await page.waitForTimeout(500)
   for (const r of requests) {
-    expect(r.url.startsWith('http://localhost:4173'), r.url).toBe(true)
+    expect(r.url.startsWith(ORIGIN), r.url).toBe(true)
     expect(r.method, r.url).toBe('GET')
     expect(r.url).not.toMatch(/GizliAd|77777/)
     expect(r.body).toBeNull()

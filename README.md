@@ -53,14 +53,15 @@ Uygulama çalışma zamanında EVDS'ye veya başka bir dış servise istek atmaz
 
 ### Aylık otomatik güncelleme
 
-`.github/workflows/data-update.yml`, her ayın 3-10'u arasında günlük çalışır (TÜİK açıklaması bu aralığa düşer), EVDS'den endeksi çeker, doğrular ve değişiklik varsa `chore(data): update CPI index` başlıklı bir PR açar. PR hiçbir zaman otomatik birleştirilmez; insan onayı gerekir. Birleşince deploy iş akışı siteyi yeniler. Yeni ayın oranı endeksten hesaplanır, kullanıcıya hem ay ay seçenek (yenileme ayı) hem son 12 ayın tablosu olarak sunulur.
+`.github/workflows/data-update.yml`, her ayın 3-10'u arasında günlük çalışır (TÜİK açıklaması bu aralığa düşer), EVDS'den endeksi çeker, doğrular ve değişiklik varsa `chore(data): update CPI index` başlıklı bir PR açar. PR hiçbir zaman otomatik birleştirilmez; insan onayı gerekir. Birleşince (`main`'e push) deploy iş akışı testleri çalıştırıp siteyi Cloudflare'de yeniler. `EVDS_API_KEY` tanımlı değilse zamanlanmış iş sessizce atlanır. Yeni ayın oranı endeksten hesaplanır, kullanıcıya hem ay ay seçenek (yenileme ayı) hem son 12 ayın tablosu olarak sunulur.
 
 Kurulum:
 
 1. [EVDS](https://evds3.tcmb.gov.tr)'e üye olun, giriş yapıp profil sayfanızdan **API anahtarı** üretin.
 2. GitHub deposunda Settings, Secrets and variables, Actions bölümüne `EVDS_API_KEY` adıyla ekleyin. Anahtarı depoya veya `.env` dışındaki herhangi bir dosyaya yazmayın (`.env` `.gitignore`'dadır).
 3. Settings, Actions, General bölümünde "Allow GitHub Actions to create and approve pull requests" seçeneğini açın.
-4. Yerelde denemek için: `EVDS_API_KEY=... npm run data:update -- --dry-run` (dosyaya yazmaz).
+4. Deploy için `CLOUDFLARE_API_TOKEN` ve `CLOUDFLARE_ACCOUNT_ID` secret'larını da ekleyin.
+5. Yerelde denemek için: `EVDS_API_KEY=... npm run data:update -- --dry-run` (dosyaya yazmaz).
 
 Betik şunları reddeder: negatif/geçersiz değer, eksik ay, aylık %15'ten büyük sıçrama (ör. zincirlenmemiş baz yılı değişikliği), açıklanan oranla çelişen hesap. Anahtar yoksa betik "elle güncelleme" kipini anlatıp çıkar: `public/data/tufe.json` dosyasını düzenleyip `npm run data:validate` çalıştırın.
 
@@ -70,20 +71,19 @@ Betik şunları reddeder: negatif/geçersiz değer, eksik ay, aylık %15'ten bü
 
 Girdiğiniz kira, ad, adres vb. bilgiler hiçbir sunucuya gönderilmez; PDF ve takvim dosyaları cihazda üretilir. Üçüncü taraf analitik, çerez veya Google Fonts isteği yoktur (yazı tipleri `public/fonts` altında self-host). Tarayıcıda yalnızca tema tercihi ve, açık izinle, takvim hatırlatma listesi saklanır; ikincisi silinebilir ve dışa aktarılabilir. Uçtan uca testler ağ isteklerini izleyerek bunu doğrular.
 
-## Dağıtım (GitHub Pages)
+## Dağıtım (Cloudflare)
 
-`.github/workflows/deploy.yml`: `main`'e her push'ta lint, veri doğrulama, birim ve uçtan uca testleri çalıştırır, derler ve Pages'e dağıtır. Depoda Settings, Pages, Source: **GitHub Actions** seçin.
+Site Cloudflare'de (Workers statik varlıkları) `kira.beraekimci.com.tr` adresinde yayınlanır. Yapılandırma `wrangler.jsonc` dosyasındadır; alan adı `routes` içinde `custom_domain` olarak tanımlıdır (DNS kaydı ve sertifika dağıtım sırasında otomatik oluşur).
 
-- `VITE_BASE`: alt dizinde yayınlıyorsanız (ör. `/Kira-Cetveli/`) Settings, Variables bölümüne ekleyin; özel alan adında `/` bırakın.
-- `VITE_SITE_URL`: `sitemap.xml` ve canonical bağlantılar için mutlak adres (ör. `https://ornek.com`). Tanımlı değilse sitemap üretilmez.
+- Elle yayın: `VITE_SITE_URL=https://kira.beraekimci.com.tr npm run deploy` (ortamda `CLOUDFLARE_API_TOKEN` ve `CLOUDFLARE_ACCOUNT_ID` bulunmalı).
+- Otomatik yayın: `.github/workflows/deploy.yml`, `main`'e her push'ta lint, veri doğrulama, birim ve uçtan uca testleri çalıştırır, derler ve yayınlar. Repo secret'ları: `CLOUDFLARE_API_TOKEN` (Workers yazma izni), `CLOUDFLARE_ACCOUNT_ID`.
+- `VITE_SITE_URL`: `sitemap.xml` ve canonical bağlantılar için mutlak adres. Tanımlı değilse sitemap üretilmez.
+- `public/_headers`: `no-transform` ile Cloudflare'in sayfaya betik eklemesini (ör. Web Analytics işaretçisi) engeller; içerik güvenlik politikası (CSP) yalnızca kendi alan adından kaynak yüklenmesine izin verir. Gizlilik beyanının dayanağıdır.
+- Başka bir alt alan adı için `wrangler.jsonc` içindeki `pattern` değerini değiştirin.
 
-### Özel alan adı (Cloudflare)
+## Başka bir statik barındırma kullanmak
 
-1. `public/CNAME.example` dosyasını `public/CNAME` olarak yeniden adlandırın ve içine yalnızca alan adını yazın. (Alan adı bu README'de bilerek boş bırakılmıştır.)
-2. Cloudflare panelinde alan adını seçin, DNS, Add record: Type **CNAME**, Name alt alan adı (kök için `@`), Target `<kullanıcı-adı>.github.io`. Önce Proxy durumunu "DNS only" yapın, GitHub sertifikayı üretene kadar bekleyin.
-3. GitHub, Settings, Pages, Custom domain alanına alan adını yazın; "Enforce HTTPS"i açın.
-4. `VITE_BASE=/` ve `VITE_SITE_URL=https://<alan-adı>` değişkenlerini ayarlayıp yeniden dağıtın.
-5. İsterseniz sertifika oluştuktan sonra Cloudflare proxy'yi açın (SSL/TLS modu **Full** olmalı).
+`dist/` klasörü düz statik dosyalardır. GitHub Pages gibi alt dizin barındırmada `VITE_BASE` (ör. `/Kira-Cetveli/`) ayarlanır; `404.html` bilinmeyen adresler için hazırdır. `public/CNAME.example` dosyası GitHub Pages özel alan adı için yer tutucudur.
 
 ## Kararlar
 

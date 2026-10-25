@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kira-cetveli",
+  "compatibility_date": "2026-10-19",
+  "observability": { "enabled": false },
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "routes": [{ "pattern": "kira.beraekimci.com.tr", "custom_domain": true }]
+}

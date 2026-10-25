@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 
+const ORIGIN = process.env.E2E_BASE_URL ?? 'http://localhost:4173'
+
 const pages = [
   ['/rehber/kiraci-haklari', 'Kiracı hakları'],
   ['/rehber/ev-sahibi-yukumlulukleri', 'Ev sahibi yükümlülükleri'],
@@ -53,7 +55,7 @@ test('the coming-soon tool does not pretend to work', async ({ page }) => {
 test('privacy claim: every tool page makes only same-origin requests', async ({ page }) => {
   const external: string[] = []
   page.on('request', (r) => {
-    if (!r.url().startsWith('http://localhost:4173')) external.push(r.url())
+    if (!r.url().startsWith(ORIGIN)) external.push(r.url())
   })
   for (const p of ['/', '/araclar', '/veri-kaynaklari', '/gizlilik', '/rehber/kiraci-haklari']) {
     await page.goto(p)

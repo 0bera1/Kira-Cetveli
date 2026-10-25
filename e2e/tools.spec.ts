@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 
+const ORIGIN = process.env.E2E_BASE_URL ?? 'http://localhost:4173'
+
 test('rate month selector fills the rate field', async ({ page }) => {
   await page.goto('/araclar/kira-artis-hesabi')
   await expect(page.getByLabel('Uygulanacak artış oranı')).toHaveValue('31,49')
@@ -58,7 +60,7 @@ test('tools hub filters by search and category', async ({ page }) => {
 test('no horizontal scroll and no external requests on tool pages', async ({ page }) => {
   const external: string[] = []
   page.on('request', (r) => {
-    if (!r.url().startsWith('http://localhost:4173')) external.push(r.url())
+    if (!r.url().startsWith(ORIGIN)) external.push(r.url())
   })
   for (const slug of [
     'kira-artis-hesabi',

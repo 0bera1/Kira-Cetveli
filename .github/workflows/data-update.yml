@@ -14,6 +14,9 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    env:
+      # secrets cannot be used in step conditions directly, so expose whether the key exists
+      HAS_KEY: ${{ secrets.EVDS_API_KEY != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,12 +25,14 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Fetch CPI index and validate
+        if: env.HAS_KEY == 'true'
         env:
           EVDS_API_KEY: ${{ secrets.EVDS_API_KEY }}
         run: npm run data:update
       - name: Validate data files
         run: npm run data:validate
       - name: Open pull request
+        if: env.HAS_KEY == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           branch: data/cpi-update
