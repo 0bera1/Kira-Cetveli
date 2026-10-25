@@ -1,7 +1,13 @@
 import type { RouteRecord } from 'vite-react-ssg'
 import { Layout } from './components/Layout'
 import Home from './pages/Home'
-import Soon from './pages/Soon'
+import GuidePage from './pages/GuidePage'
+import Gizlilik from './pages/Gizlilik'
+import Hakkinda from './pages/Hakkinda'
+import NotFound from './pages/NotFound'
+import VeriKaynaklari from './pages/VeriKaynaklari'
+import BolgeKiraKarsilastirma from './pages/tools/BolgeKiraKarsilastirma'
+import { guides } from './content/guides'
 import ToolsHub from './pages/ToolsHub'
 import DepozitoIadesi from './pages/tools/DepozitoIadesi'
 import GecikmeFaizi from './pages/tools/GecikmeFaizi'
@@ -29,12 +35,12 @@ export const routes: RouteRecord[] = [
       { path: 'araclar/tahliye-ve-depozito-yazisi', element: <TahliyeVeDepozitoYazisi /> },
       { path: 'araclar/sozlesme-kontrol-listesi', element: <SozlesmeKontrolListesi /> },
       { path: 'araclar/sozlesme-takvimi', element: <SozlesmeTakvimi /> },
-      {
-        path: 'veri-kaynaklari',
-        element: <Soon title="Veri kaynakları" path="/veri-kaynaklari" />,
-      },
-      { path: 'gizlilik', element: <Soon title="Gizlilik" path="/gizlilik" /> },
-      { path: 'hakkinda', element: <Soon title="Hakkında" path="/hakkinda" /> },
+      { path: 'araclar/bolge-kira-karsilastirma', element: <BolgeKiraKarsilastirma /> },
+      ...guides.map((g) => ({ path: `rehber/${g.slug}`, element: <GuidePage guide={g} /> })),
+      { path: 'veri-kaynaklari', element: <VeriKaynaklari /> },
+      { path: 'gizlilik', element: <Gizlilik /> },
+      { path: 'hakkinda', element: <Hakkinda /> },
+      { path: '*', element: <NotFound /> },
     ],
   },
 ]

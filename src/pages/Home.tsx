@@ -10,6 +10,7 @@ import { formatLira, formatPercent, parseNumber } from '../lib/rent/money'
 import { useRateChoice } from '../lib/useRateChoice'
 import { useData } from '../lib/data/DataContext'
 import { useRole } from '../lib/role'
+import { faqJsonLd } from '../lib/seo'
 import styles from './Home.module.css'
 
 const faq: FaqItem[] = [
@@ -64,14 +65,17 @@ export default function Home() {
         title="Kira artışı hesaplama ve takip araçları"
         description="Kira artışını TÜFE 12 aylık ortalamaya göre hesaplayın; gecikme faizi, depozito, belge ve takvim araçları. Verileriniz cihazınızdan çıkmaz."
         path="/"
-        jsonLd={{
-          '@context': 'https://schema.org',
-          '@type': 'SoftwareApplication',
-          name: 'Kira Cetveli',
-          applicationCategory: 'FinanceApplication',
-          operatingSystem: 'Web',
-          inLanguage: 'tr',
-        }}
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'SoftwareApplication',
+            name: 'Kira Cetveli',
+            applicationCategory: 'FinanceApplication',
+            operatingSystem: 'Web',
+            inLanguage: 'tr',
+          },
+          faqJsonLd(faq),
+        ]}
       />
       <div className={styles.grid}>
         <div>

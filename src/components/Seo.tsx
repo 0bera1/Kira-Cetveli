@@ -1,10 +1,11 @@
 import { Head } from 'vite-react-ssg'
+import { SITE_URL } from '../lib/seo'
 
 interface SeoProps {
   title: string
   description: string
   path: string
-  jsonLd?: object
+  jsonLd?: object | object[]
 }
 
 const SITE = 'Kira Cetveli'
@@ -19,7 +20,8 @@ export function Seo({ title, description, path, jsonLd }: SeoProps) {
       <meta property="og:description" content={description} />
       <meta property="og:type" content="website" />
       <meta property="og:locale" content="tr_TR" />
-      <meta property="og:url" content={path} />
+      {SITE_URL && <meta property="og:url" content={`${SITE_URL}${path}`} />}
+      {SITE_URL && <link rel="canonical" href={`${SITE_URL}${path}`} />}
       {jsonLd && <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
     </Head>
   )
