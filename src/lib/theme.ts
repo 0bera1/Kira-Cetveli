@@ -11,6 +11,8 @@ export function useTheme(): [Theme, () => void] {
 
   useEffect(() => {
     const attr = document.documentElement.dataset.theme
+    // reading the DOM after hydration; initial render must match the prerendered HTML
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(attr === 'light' || attr === 'dark' ? attr : systemTheme())
   }, [])
 
