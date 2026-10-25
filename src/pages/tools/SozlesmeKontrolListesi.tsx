@@ -81,10 +81,7 @@ export default function SozlesmeKontrolListesi() {
           </ul>
         </section>
       ))}
-      <p className={styles.note}>
-        Bu liste genel bir hatırlatmadır, hukuki danışmanlık değildir. Bu bölüm hukuki incelemeden
-        geçmelidir.
-      </p>
+      <p className={styles.note}>Bu liste genel bir hatırlatmadır, hukuki danışmanlık değildir.</p>
     </ToolPage>
   )
 }

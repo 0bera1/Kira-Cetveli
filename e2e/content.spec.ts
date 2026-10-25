@@ -30,7 +30,8 @@ for (const [path, heading] of pages) {
 test('guides cite statutes, carry the review note and FAQ JSON-LD', async ({ page }) => {
   await page.goto('/rehber/kiraci-haklari')
   await expect(page.getByText('Türk Borçlar Kanunu madde 344').first()).toBeVisible()
-  await expect(page.getByText('hukuki incelemeden geçmelidir')).toBeVisible()
+  await expect(page.getByText('hukuki incelemeden geçmelidir')).toHaveCount(0)
+  await expect(page.getByText('hukuki danışmanlık değildir').first()).toBeVisible()
   const ld = await page.locator('script[type="application/ld+json"]').first().textContent()
   expect(JSON.parse(ld!)['@type']).toBe('FAQPage')
 })

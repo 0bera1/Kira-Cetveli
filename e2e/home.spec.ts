@@ -81,3 +81,20 @@ test('header navigation mirrors the footer and marks the current page', async ({
     ).toBe(false)
   }
 })
+
+test('client-side navigation never requests build-hashed loader files', async ({ page }) => {
+  const loaderRequests: string[] = []
+  const errors: string[] = []
+  page.on('request', (r) => {
+    if (/static-loader/.test(r.url())) loaderRequests.push(r.url())
+  })
+  page.on('pageerror', (e) => errors.push(e.message))
+  await page.goto('/')
+  const header = page.getByRole('navigation', { name: 'Ana gezinti' })
+  for (const name of ['Veri kaynakları', 'Gizlilik', 'Hakkında', 'Araçlar']) {
+    await header.getByRole('link', { name }).click()
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(name)
+  }
+  expect(loaderRequests).toEqual([])
+  expect(errors).toEqual([])
+})

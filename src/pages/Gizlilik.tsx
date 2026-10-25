@@ -40,8 +40,7 @@ export default function Gizlilik() {
         isteğe eklenmediğini, kendi alan adı dışında istek yapılmadığını denetler.
       </p>
       <p className={styles.note}>
-        Bu sayfa teknik bir açıklamadır; hukuki bir aydınlatma metni yerine geçmez. Bu bölüm hukuki
-        incelemeden geçmelidir.
+        Bu sayfa teknik bir açıklamadır; hukuki bir aydınlatma metni yerine geçmez.
       </p>
     </article>
   )

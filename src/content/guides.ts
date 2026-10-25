@@ -13,9 +13,6 @@ export interface Guide {
   faq: { q: string; a: string }[]
 }
 
-export const REVIEW_NOTE =
-  'Bu bölüm hukuki incelemeden geçmelidir. Maddeler ve içerik, yayından önce güncel mevzuat ve Yargıtay uygulamasıyla doğrulanmalıdır.'
-
 export const guides: Guide[] = [
   {
     slug: 'kiraci-haklari',
