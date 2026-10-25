@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { tools, toolPath } from '../src/tools'
 
@@ -45,3 +45,20 @@ writeFileSync(
   join(dist, '404.html'),
   shell.replace(/<script>window\.__staticRouterHydrationData[\s\S]*?<\/script>/, ''),
 )
+
+// The head tags injected during prerendering end up before <meta charset>, which browsers want
+// within the first 1024 bytes. Move it to the very top of every page.
+function htmlFiles(dir: string): string[] {
+  return readdirSync(dir).flatMap((name) => {
+    const path = join(dir, name)
+    if (statSync(path).isDirectory()) return htmlFiles(path)
+    return name.endsWith('.html') ? [path] : []
+  })
+}
+for (const file of htmlFiles(dist)) {
+  const html = readFileSync(file, 'utf8')
+  const charset = /<meta charset="UTF-8"\s*\/?>/i.exec(html)
+  if (!charset) continue
+  const moved = html.replace(charset[0], '').replace(/<head>/, `<head>${charset[0]}`)
+  writeFileSync(file, moved)
+}

@@ -149,7 +149,7 @@ export default function SozlesmeTakvimi() {
             </>
           )}
         </fieldset>
-        <ResultNotice />
+        <ResultNotice rates={false} />
       </Paper>
     </ToolPage>
   )

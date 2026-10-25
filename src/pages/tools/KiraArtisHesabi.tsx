@@ -22,16 +22,16 @@ export default function KiraArtisHesabi() {
     <ToolPage slug="kira-artis-hesabi">
       <Paper title="HESAP PUSULASI">
         <Field id="kira" label="Mevcut aylık kira" value={rent} onChange={setRent} suffix="₺" />
-        {monthOptions.length > 0 && (
-          <SelectField
-            id="yenileme"
-            label="Sözleşme yıldönümü (yenileme ayı)"
-            value={choice.selected}
-            onChange={choice.setSelected}
-            options={monthOptions}
-            hint="Seçtiğiniz ayın oranı aşağıdaki alana otomatik gelir."
-          />
-        )}
+        <SelectField
+          id="yenileme"
+          label="Sözleşme yıldönümü (yenileme ayı)"
+          value={choice.selected}
+          onChange={choice.setSelected}
+          options={
+            monthOptions.length > 0 ? monthOptions : [{ value: '', label: 'Oranlar yükleniyor...' }]
+          }
+          hint="Seçtiğiniz ayın oranı aşağıdaki alana otomatik gelir."
+        />
         <Field
           id="oran"
           label="Uygulanacak artış oranı"

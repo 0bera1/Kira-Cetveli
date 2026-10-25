@@ -28,13 +28,14 @@ export function formatDate(iso: string): string {
 }
 
 /** Disclaimer + data freshness line shown under every result and document. */
-export function ResultNotice() {
+export function ResultNotice({ rates = true }: { rates?: boolean }) {
   const { tufe, error } = useData()
   return (
     <div className={styles.notice}>
       {error && (
         <p className={styles.warn} role="alert">
-          Veri dosyası yüklenemedi veya doğrulanamadı. Oranı elle girin.
+          Güncel veri dosyası alınamadı; yayın anındaki veri gösteriliyor. Oranı resmî kaynaktan
+          doğrulayın.
         </p>
       )}
       {tufe && isStale(tufe.guncelleme) && (
@@ -42,7 +43,7 @@ export function ResultNotice() {
           Veri 45 günden eski. Sonuçlar güncel olmayabilir; resmî kaynaktan doğrulayın.
         </p>
       )}
-      {tufe?.dogrulanmamis && (
+      {rates && tufe?.dogrulanmamis && (
         <p className={styles.warn}>Şu an kullanılan oran teyit edilmemiş örnek veridir.</p>
       )}
       {tufe && <p>Veri son güncelleme: {formatDate(tufe.guncelleme)}</p>}
