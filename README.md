@@ -15,7 +15,7 @@ Kira artışını doğru hesaplamak ve kira konusundaki günlük işleri (gecikm
 
 ## Kurulum ve geliştirme
 
-Gereksinim: Node.js 20 veya üzeri.
+Gereksinim: Node.js 22 veya üzeri (uygulama Node 20'de de derlenir; Cloudflare dağıtım aracı Wrangler Node 22 ister).
 
 ```
 npm install
