@@ -56,3 +56,64 @@
   font-size: 0.82rem;
   color: var(--muted);
 }
+
+.plain {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+  font-size: 1rem;
+}
+
+textarea.plain {
+  resize: vertical;
+}
+
+.result {
+  border-top: 1px dashed var(--line);
+  margin-top: 14px;
+  padding-top: 16px;
+}
+.resultLabel {
+  color: var(--muted);
+  font-weight: 600;
+}
+.error {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.big {
+  font-family: var(--font-head);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  font-size: clamp(2.2rem, 8vw, 3.4rem);
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.rows {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 14px 0 0;
+}
+.rows div {
+  border-top: 1px dashed var(--line);
+  padding-top: 8px;
+}
+.rows dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.rows dd {
+  margin: 0;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.3rem;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}

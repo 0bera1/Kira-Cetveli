@@ -1,13 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { tufeSchema, yasalSchema } from '../data/schemas'
 import { backpay } from './backpay'
-import {
-  addMonths,
-  averageChangeFromIndex,
-  crossCheck,
-  latestDataMonth,
-  rateOptions,
-} from './cpi'
+import { addMonths, averageChangeFromIndex, crossCheck, latestDataMonth, rateOptions } from './cpi'
 import { computeIncrease } from './increase'
 import { daysBetween, depositRefund, simpleInterest } from './interest'
 import { legalInterestOn } from './legalRate'
@@ -211,8 +205,22 @@ describe('tax', () => {
 describe('legal interest timeline', () => {
   const data = {
     yasalFaiz: [
-      { baslangic: '2020-01-01', bitis: '2023-12-31', oran: 9, kaynak: '', dogrulamaTarihi: null, dogrulanmali: true },
-      { baslangic: '2024-01-01', bitis: null, oran: 24, kaynak: '', dogrulamaTarihi: null, dogrulanmali: true },
+      {
+        baslangic: '2020-01-01',
+        bitis: '2023-12-31',
+        oran: 9,
+        kaynak: '',
+        dogrulamaTarihi: null,
+        dogrulanmali: true,
+      },
+      {
+        baslangic: '2024-01-01',
+        bitis: null,
+        oran: 24,
+        kaynak: '',
+        dogrulamaTarihi: null,
+        dogrulanmali: true,
+      },
     ],
   }
   it('picks the right period', () => {

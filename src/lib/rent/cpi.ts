@@ -77,7 +77,9 @@ export function rateForDataMonth(
 }
 
 export function latestDataMonth(tufe: Series): MonthKey | null {
-  const months = [...new Set([...Object.keys(tufe.ortalamaDegisim), ...Object.keys(tufe.endeks)])].sort()
+  const months = [
+    ...new Set([...Object.keys(tufe.ortalamaDegisim), ...Object.keys(tufe.endeks)]),
+  ].sort()
   for (let i = months.length - 1; i >= 0; i--) {
     if (rateForDataMonth(tufe, months[i])) return months[i]
   }

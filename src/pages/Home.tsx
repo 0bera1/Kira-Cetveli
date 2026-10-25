@@ -7,7 +7,7 @@ import { RulerGauge } from '../components/RulerGauge'
 import { Seo } from '../components/Seo'
 import { computeIncrease } from '../lib/rent/increase'
 import { formatLira, formatPercent, parseNumber } from '../lib/rent/money'
-import { latestAverageChange } from '../lib/data/schemas'
+import { useRateChoice } from '../lib/useRateChoice'
 import { useData } from '../lib/data/DataContext'
 import { useRole } from '../lib/role'
 import styles from './Home.module.css'
@@ -41,20 +41,20 @@ const copy = {
 export default function Home() {
   const [role] = useRole()
   const { tufe } = useData()
-  const latest = tufe ? latestAverageChange(tufe) : null
+  const choice = useRateChoice()
   const [rent, setRent] = useState('10.000')
-  const [rateOverride, setRateOverride] = useState<string | null>(null)
-
-  const defaultRate = latest ? latest.rate.toFixed(2).replace('.', ',') : ''
-  const rateText = rateOverride ?? defaultRate
-  const rate = parseNumber(rateText)
+  const rate = choice.rate
+  const rateText = choice.rateText
+  const latest = choice.option
+  const rateOverride = choice.overridden ? choice.rateText : null
+  const setRateOverride = choice.setRateText
   const result = computeIncrease(parseNumber(rent), rate)
 
   let rateHint = 'Oran verisi yüklenemedi; elle girin.'
   if (latest && tufe) {
     rateHint =
       rateOverride === null
-        ? `Kaynak: ${tufe.kaynak.ad}, ${formatMonth(latest.month)}. Düzenleyebilirsiniz.`
+        ? `Kaynak: ${tufe.kaynak.ad}, ${formatMonth(latest.dataMonth)}. Düzenleyebilirsiniz.`
         : `Elle girildi. Güncel TÜFE 12 aylık ortalama: ${formatPercent(latest.rate)}.`
   }
 
