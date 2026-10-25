@@ -245,3 +245,17 @@ describe('shipped data files', () => {
     expect(crossCheck(tufeSchema.parse(tufeJson))).toEqual([])
   })
 })
+
+describe('real EVDS index', () => {
+  const tufe = tufeSchema.parse(tufeJson)
+  it('reproduces every announced rate from the index within 0.02', () => {
+    for (const [month, announced] of Object.entries(tufe.ortalamaDegisim)) {
+      const computed = averageChangeFromIndex(tufe.endeks, month)
+      expect(computed, month).not.toBeNull()
+      expect(Math.abs(computed! - announced), month).toBeLessThanOrEqual(0.02)
+    }
+  })
+  it('records which EVDS series the values came from', () => {
+    expect(tufe.seri).toBe('TP.TUKFIY2025.GENEL')
+  })
+})

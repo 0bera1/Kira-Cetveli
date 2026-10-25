@@ -8,8 +8,11 @@
  */
 
 export const DEFAULT_BASE = 'https://evds3.tcmb.gov.tr/igmevdsms-dis'
-/** General CPI index series. Check it after TUIK base-year changes. */
-export const DEFAULT_SERIES = 'TP.FG.J0'
+/**
+ * General CPI index, 2025=100 (data group bie_tukfiy2025). Found by browsing the EVDS category list;
+ * the older TP.FG.J0 (2003=100) series stops in January 2026. Re-check after any base-year change.
+ */
+export const DEFAULT_SERIES = 'TP.TUKFIY2025.GENEL'
 
 export function formatEvdsDate(d: Date): string {
   const dd = String(d.getUTCDate()).padStart(2, '0')

@@ -65,7 +65,7 @@ Kurulum:
 
 Betik şunları reddeder: negatif/geçersiz değer, eksik ay, aylık %15'ten büyük sıçrama (ör. zincirlenmemiş baz yılı değişikliği), açıklanan oranla çelişen hesap. Anahtar yoksa betik "elle güncelleme" kipini anlatıp çıkar: `public/data/tufe.json` dosyasını düzenleyip `npm run data:validate` çalıştırın.
 
-> **EVDS ayrıntıları doğrulanmadı.** Uç nokta (`evds3.tcmb.gov.tr/igmevdsms-dis`), parametrelerin yola `&` ile eklenmesi, tarih biçimi (GG-AA-YYYY), anahtarın `key` başlığıyla iletilmesi ve seri kodu `TP.FG.J0` resmî kılavuzdan değil, ikincil kaynaklardan (bakımı yapılan istemci kütüphaneleri ve TCMB duyurusu) alınmıştır; resmî kılavuz bu çalışma sırasında okunamadı. Gerçek anahtarla ilk çalıştırmada bunların doğru olduğunu ve TÜİK baz yılı değişikliğinden sonra `TP.FG.J0` serisinin hâlâ genel TÜFE endeksi olduğunu teyit edin. Gerekirse `EVDS_BASE` ve `EVDS_SERIES` ortam değişkenleriyle düzeltebilirsiniz. EVDS kullanım şartları gereği veriler kaynak gösterilerek kullanılır (siteye eklenmiştir).
+> **EVDS ayrıntıları gerçek anahtarla doğrulandı (25 Ekim 2026).** Uç nokta `https://evds3.tcmb.gov.tr/igmevdsms-dis`, parametrelerin yola `&` ile eklenmesi, tarih biçimi (GG-AA-YYYY) ve anahtarın `key` başlığıyla iletilmesi çalışıyor. Eski `TP.FG.J0` serisi (2003=100) Ocak 2026'da bitiyor; TÜİK'in yeni baz yılı (2025=100) serisi `TP.TUKFIY2025.GENEL` (veri grubu `bie_tukfiy2025`) 2005'ten itibaren tek, tutarlı bir seri sunuyor ve varsayılan olarak o kullanılıyor. `tufe.json` hangi seriden geldiğini `seri` alanında tutar; seri değişirse betik eski endeksi birleştirmez, tamamen değiştirir (farklı baz yılları karışırsa oranlar bozulur). Başka bir seri için `EVDS_BASE` ve `EVDS_SERIES` ortam değişkenleri kullanılabilir. EVDS kullanım şartları gereği veriler kaynak gösterilerek kullanılır (siteye eklenmiştir).
 
 ## Gizlilik
 
@@ -101,8 +101,8 @@ Site Cloudflare'de (Workers statik varlıkları) `kira.beraekimci.com.tr` adresi
 
 ## Yapılacaklar (hukuki inceleme ve doğrulama gerektirenler)
 
-- [ ] `tufe.json` içindeki `ortalamaDegisim` değerlerini (Eylül 2025 - Eylül 2026) TÜİK açıklamalarıyla karşılaştırıp işaretini kaldırın. Şu an basın ve hukuk sitelerinden alınmış, **teyit edilmemiş örnektir** (Ekim 2026 yenilemesi için %31,49 dahil).
-- [ ] EVDS anahtarıyla ilk çalıştırmada uç nokta, başlık, tarih biçimi ve `TP.FG.J0` seri kodunu doğrulayın (yukarıdaki not).
+- [x] `tufe.json` içindeki 13 açıklanan oran (Eylül 2025 - Eylül 2026) gerçek EVDS endeksinden hesaplanan değerle 0,02 puan içinde örtüştü. İsterseniz TÜİK bülteniyle ayrıca karşılaştırın.
+- [x] EVDS uç noktası, başlık, tarih biçimi ve yeni seri kodu gerçek anahtarla doğrulandı.
 - [ ] `yasal-oranlar.json`: yasal faiz oranı (24, 1 Haziran 2024), 2024/2025 kira istisnası (33.000 / 47.000), 2024/2025 gelir vergisi tarifesi, götürü gider oranı (%15), stopaj oranları hafızadan girilmiştir; Resmî Gazete ve GİB'den doğrulayın. 2026 istisna tutarı ve tarifesi eksik.
 - [ ] Konut kira artışında %25 üst sınırın sona erdiği bilgisini Resmî Gazete / TÜİK ile yayından önce bir kez daha doğrulayın.
 - [ ] Rehber sayfaları ve atıf yapılan TBK maddeleri (315, 342, 344, 347, 350, 351) bir hukukçu tarafından gözden geçirilmeli; kira bedelinin ödenmesi, tahliye taahhüdü ve ödeme ihtarı süreleri gibi konular eklenmeden önce incelenmeli.

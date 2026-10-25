@@ -8,6 +8,8 @@ export const tufeSchema = z.object({
   dogrulanmamis: z.boolean().optional(),
   not: z.string().optional(),
   kaynak: z.object({ ad: z.string(), url: z.string().url() }),
+  /** EVDS series code the index values came from (mixing base years would corrupt the ratios). */
+  seri: z.string().optional(),
   /** Monthly CPI index, keyed by data month. */
   endeks: z.record(monthKey, z.number().positive().max(1e7)),
   /** Announced 12-month-average change (percent), keyed by data month. */

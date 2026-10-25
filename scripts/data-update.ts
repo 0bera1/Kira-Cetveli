@@ -37,7 +37,17 @@ if (!res.ok) {
 const fetched = parseEvdsItems(await res.json(), series)
 
 const current = tufeSchema.parse(JSON.parse(readFileSync(FILE, 'utf8')))
-const next = { ...current, endeks: { ...current.endeks, ...fetched } }
+// A different series (e.g. a new base year) must replace the old values, never be mixed into them.
+const sameSeries = current.seri === series
+if (!sameSeries)
+  console.log(
+    `Series changed (${current.seri ?? 'unknown'} -> ${series}): replacing the whole index.`,
+  )
+const next = {
+  ...current,
+  seri: series,
+  endeks: sameSeries ? { ...current.endeks, ...fetched } : fetched,
+}
 const diff = diffEndeks(current.endeks, next.endeks)
 
 console.log(`Added months: ${diff.added.length ? diff.added.join(', ') : 'none'}`)
