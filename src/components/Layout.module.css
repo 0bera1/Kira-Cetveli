@@ -1,0 +1,99 @@
+.ruler {
+  height: 14px;
+  background:
+    repeating-linear-gradient(90deg, var(--text) 0 1px, transparent 1px 12px) bottom / 100% 6px
+      no-repeat,
+    repeating-linear-gradient(90deg, var(--text) 0 1px, transparent 1px 60px) bottom / 100% 12px
+      no-repeat;
+  border-bottom: 1px solid var(--text);
+  opacity: 0.75;
+}
+
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 16px 48px;
+}
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.logo {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.6rem;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.segment {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.segment button {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  font-weight: 600;
+}
+
+.segment button[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.iconButton {
+  width: 44px;
+  height: 44px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.footer {
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--line);
+  color: var(--muted);
+  font-size: 0.9rem;
+  display: grid;
+  gap: 10px;
+}
+
+.footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+}
+.footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}

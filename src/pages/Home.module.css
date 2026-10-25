@@ -1,0 +1,72 @@
+.grid {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: 1fr;
+  padding-top: 12px;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+}
+
+.hero {
+  font-size: clamp(2.3rem, 6vw, 4.2rem);
+  margin-bottom: 28px;
+}
+
+.result {
+  border-top: 1px dashed var(--line);
+  margin-top: 14px;
+  padding-top: 16px;
+}
+.label {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.big {
+  font-family: var(--font-head);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  font-size: clamp(2.4rem, 9vw, 3.6rem);
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.diffs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 14px 0 0;
+}
+.diffs div {
+  border-top: 1px dashed var(--line);
+  padding-top: 8px;
+}
+.diffs dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.diffs dd {
+  margin: 0;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.4rem;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.error {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.side {
+  display: grid;
+  gap: 8px;
+}

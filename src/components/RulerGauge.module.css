@@ -1,0 +1,35 @@
+.gauge {
+  position: relative;
+  padding-top: 14px;
+  margin: 18px 0 6px;
+}
+
+.marker {
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 12px solid var(--accent);
+  transform: translateX(-8px);
+  transition: left 0.25s ease;
+}
+
+.scale {
+  height: 16px;
+  border-top: 2px solid var(--text);
+  background:
+    repeating-linear-gradient(90deg, var(--text) 0 1px, transparent 1px calc(100% / 60 * 1)) top /
+      100% 7px no-repeat,
+    repeating-linear-gradient(90deg, var(--text) 0 2px, transparent 2px calc(100% / 6)) top / 100%
+      16px no-repeat;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}

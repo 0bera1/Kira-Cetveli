@@ -1,0 +1,54 @@
+import { expect, test } from '@playwright/test'
+
+test('default values give the expected result', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.getByTestId('new-rent')).toHaveText(/13\.149,00/)
+})
+
+test('role switch changes copy', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Kirana gelen zam')
+  await page.getByRole('button', { name: 'Ev sahibiyim' }).click()
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Kira artışını doğru')
+  await expect(page.getByText('İsteyebileceğin yeni kira')).toBeVisible()
+})
+
+test('theme toggles and persists', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: /Karanlık temaya geç|Aydınlık temaya geç/ }).click()
+  const t = await page.evaluate(() => document.documentElement.dataset.theme)
+  await page.reload()
+  expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(t)
+})
+
+test('no external requests and no horizontal scroll', async ({ page }) => {
+  const external: string[] = []
+  page.on('request', (r) => {
+    if (!r.url().startsWith('http://localhost:4173')) external.push(r.url())
+  })
+  for (const w of [390, 768, 1280]) {
+    await page.setViewportSize({ width: w, height: 900 })
+    await page.goto('/')
+    await page.getByLabel('Mevcut aylık kira').fill('12345')
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    )
+    expect(overflow).toBe(false)
+  }
+  expect(external).toEqual([])
+})
+
+test('screenshots', async ({ page }) => {
+  for (const [w, h] of [
+    [390, 900],
+    [1280, 900],
+  ]) {
+    for (const theme of ['light', 'dark']) {
+      await page.setViewportSize({ width: w, height: h })
+      await page.emulateMedia({ colorScheme: theme as 'light' | 'dark' })
+      await page.goto('/')
+      await page.waitForTimeout(300)
+      await page.screenshot({ path: `shots/home-${w}-${theme}.png`, fullPage: true })
+    }
+  }
+})

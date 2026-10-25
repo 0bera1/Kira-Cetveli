@@ -1,0 +1,78 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+.head h2 {
+  font-size: 1.3rem;
+}
+.head span {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.3rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.bar {
+  height: 8px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.bar div {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.25s ease;
+}
+
+.card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.card li + li {
+  border-top: 1px dashed var(--line);
+}
+
+.card li button {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.box {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--text);
+  border-radius: 4px;
+}
+
+button[aria-pressed='true'] .box {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.done {
+  color: var(--muted);
+  text-decoration: line-through;
+}

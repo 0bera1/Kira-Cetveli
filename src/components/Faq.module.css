@@ -1,0 +1,33 @@
+.faq {
+  margin-top: 24px;
+}
+.faq > h2 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+.item {
+  border-bottom: 1px dashed var(--line);
+}
+.item h3 {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+.item button {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-weight: 600;
+}
+.item p {
+  padding: 0 0 14px;
+  color: var(--muted);
+}
