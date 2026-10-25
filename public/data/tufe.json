@@ -1,8 +1,8 @@
 {
   "guncelleme": "2026-10-25",
   "dogrulanmamis": true,
-  "not": "Teyit edilmemiş örnek veri. Gerçek değerler TÜİK açıklamasından alınıp işlenecek.",
+  "not": "Anahtar, TÜFE verisinin ait olduğu aydır (kira yenileme ayı bir sonraki aydır). Değerler basın/ikincil kaynaklardan alınmış teyit edilmemiş örnektir; TÜİK açıklamasıyla değiştirilecek. Endeks serisi henüz yok.",
   "kaynak": { "ad": "TÜİK (teyit edilmemiş örnek)", "url": "https://data.tuik.gov.tr/Kategori/GetKategori?p=enflasyon-ve-fiyat-106" },
   "endeks": {},
-  "ortalamaDegisim": { "2026-09": 31.79, "2026-10": 31.49 }
+  "ortalamaDegisim": { "2026-07": 31.9, "2026-08": 31.79, "2026-09": 31.49 }
 }
