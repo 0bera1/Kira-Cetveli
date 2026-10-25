@@ -1,0 +1,53 @@
+{
+  "guncelleme": "2026-10-25",
+  "dogrulanmamis": true,
+  "not": "Bu dosyadaki tüm değerler dogrulanmali: true ile işaretlidir; yayına çıkmadan önce Resmî Gazete / GİB / TCMB kaynaklarından teyit edilmelidir. tutar null ise veri yoktur, kullanıcı elle girer.",
+  "yasalFaiz": [
+    {
+      "baslangic": "2024-06-01",
+      "bitis": null,
+      "oran": 24,
+      "kaynak": "https://www.resmigazete.gov.tr",
+      "dogrulamaTarihi": null,
+      "dogrulanmali": true
+    }
+  ],
+  "kiraIstisnasi": [
+    { "yil": 2024, "tutar": 33000, "kaynak": "https://www.gib.gov.tr", "dogrulamaTarihi": null, "dogrulanmali": true },
+    { "yil": 2025, "tutar": 47000, "kaynak": "https://www.gib.gov.tr", "dogrulamaTarihi": null, "dogrulanmali": true },
+    { "yil": 2026, "tutar": null, "kaynak": "https://www.gib.gov.tr", "dogrulamaTarihi": null, "dogrulanmali": true }
+  ],
+  "gelirVergisiTarifesi": [
+    {
+      "yil": 2024,
+      "dilimler": [
+        { "ust": 110000, "oran": 15 },
+        { "ust": 230000, "oran": 20 },
+        { "ust": 580000, "oran": 27 },
+        { "ust": 3000000, "oran": 35 },
+        { "ust": null, "oran": 40 }
+      ],
+      "kaynak": "https://www.gib.gov.tr",
+      "dogrulamaTarihi": null,
+      "dogrulanmali": true
+    },
+    {
+      "yil": 2025,
+      "dilimler": [
+        { "ust": 158000, "oran": 15 },
+        { "ust": 330000, "oran": 20 },
+        { "ust": 800000, "oran": 27 },
+        { "ust": 4300000, "oran": 35 },
+        { "ust": null, "oran": 40 }
+      ],
+      "kaynak": "https://www.gib.gov.tr",
+      "dogrulamaTarihi": null,
+      "dogrulanmali": true
+    }
+  ],
+  "goturuGiderOrani": { "oran": 15, "kaynak": "https://www.gib.gov.tr", "dogrulanmali": true },
+  "stopaj": [
+    { "tur": "konut", "oran": 0, "aciklama": "Konut kiralarında kiracı stopaj yapmaz.", "dogrulanmali": true },
+    { "tur": "isyeri", "oran": 20, "aciklama": "İş yeri kiralarında kiracı (tevkifat yükümlüsü ise) stopaj yapar.", "dogrulanmali": true }
+  ]
+}

@@ -1,27 +1,35 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import { tufeSchema, type TufeData } from './schemas'
+import { tufeSchema, yasalSchema, type TufeData, type YasalData } from './schemas'
 
 interface DataState {
   tufe: TufeData | null
+  yasal: YasalData | null
+  /** True once loading finished and at least one file failed. */
   error: boolean
 }
 
-const DataContext = createContext<DataState>({ tufe: null, error: false })
+const DataContext = createContext<DataState>({ tufe: null, yasal: null, error: false })
+
+async function load<T>(file: string, parse: (json: unknown) => T): Promise<T | null> {
+  try {
+    const res = await fetch(`${import.meta.env.BASE_URL}data/${file}`)
+    return parse(await res.json())
+  } catch {
+    return null
+  }
+}
 
 export function DataProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<DataState>({ tufe: null, error: false })
+  const [state, setState] = useState<DataState>({ tufe: null, yasal: null, error: false })
 
   useEffect(() => {
     let cancelled = false
-    fetch(`${import.meta.env.BASE_URL}data/tufe.json`)
-      .then((r) => r.json())
-      .then((json) => {
-        const parsed = tufeSchema.parse(json)
-        if (!cancelled) setState({ tufe: parsed, error: false })
-      })
-      .catch(() => {
-        if (!cancelled) setState({ tufe: null, error: true })
-      })
+    Promise.all([
+      load('tufe.json', (j) => tufeSchema.parse(j)),
+      load('yasal-oranlar.json', (j) => yasalSchema.parse(j)),
+    ]).then(([tufe, yasal]) => {
+      if (!cancelled) setState({ tufe, yasal, error: !tufe || !yasal })
+    })
     return () => {
       cancelled = true
     }
