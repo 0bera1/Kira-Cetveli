@@ -14,7 +14,7 @@ function TopBar() {
   const [role, setRole] = useRole()
   const [theme, toggleTheme] = useTheme()
   return (
-    <header className={styles.topbar}>
+    <header className={styles.topbar} data-noprint>
       <Link to="/" className={styles.logo} aria-label="Kira Cetveli ana sayfa">
         Kira<span>Cetveli</span>
       </Link>
@@ -48,13 +48,13 @@ export function Layout() {
   return (
     <DataProvider>
       <RoleProvider>
-        <div className={styles.ruler} aria-hidden="true" />
+        <div className={styles.ruler} aria-hidden="true" data-noprint />
         <div className={styles.shell}>
           <TopBar />
           <main id="icerik">
             <Outlet />
           </main>
-          <footer className={styles.footer}>
+          <footer className={styles.footer} data-noprint>
             <nav aria-label="Alt bağlantılar">
               <Link to="/araclar">Araçlar</Link>
               <Link to="/veri-kaynaklari">Veri kaynakları</Link>

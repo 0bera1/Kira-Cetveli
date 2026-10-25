@@ -245,3 +245,13 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+@media print {
+  [data-noprint] {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+}
