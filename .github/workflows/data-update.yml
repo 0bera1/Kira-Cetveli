@@ -1,0 +1,46 @@
+name: data-update
+
+# TUIK publishes CPI in the first days of each month. Run daily in that window; the script exits
+# without changes on days with nothing new, so no pull request is opened.
+on:
+  schedule:
+    - cron: '0 8 3-10 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Fetch CPI index and validate
+        env:
+          EVDS_API_KEY: ${{ secrets.EVDS_API_KEY }}
+        run: npm run data:update
+      - name: Validate data files
+        run: npm run data:validate
+      - name: Open pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: data/cpi-update
+          delete-branch: true
+          commit-message: 'chore(data): update CPI index'
+          title: 'chore(data): update CPI index'
+          author: '${{ github.repository_owner }} <${{ github.repository_owner_id }}+${{ github.repository_owner }}@users.noreply.github.com>'
+          committer: '${{ github.repository_owner }} <${{ github.repository_owner_id }}+${{ github.repository_owner }}@users.noreply.github.com>'
+          body: |
+            Monthly CPI index refresh from the EVDS web service.
+
+            Review checklist:
+            - [ ] New months match the figures announced by TUIK
+            - [ ] `npm run data:validate` shows no cross-check errors
+            - [ ] Merge manually; this pull request is never merged automatically
+          add-paths: public/data/tufe.json

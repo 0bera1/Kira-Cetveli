@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useData } from '../lib/data/DataContext'
 import { DISCLAIMER, formatDateTr, textToBlocks } from '../lib/docs/templates'
 import { downloadBlob, loadFontBytes } from '../lib/pdf/loadFonts'
-import { makePdf } from '../lib/pdf/makePdf'
 import styles from './DocOutput.module.css'
 
 /** Editable document text with PDF download and copy actions. Nothing leaves the browser. */
@@ -32,6 +31,7 @@ export function DocOutput({
     setBusy(true)
     setStatus('')
     try {
+      const { makePdf } = await import('../lib/pdf/makePdf')
       const bytes = await makePdf(
         { title, blocks: textToBlocks(text), footer },
         await loadFontBytes(),

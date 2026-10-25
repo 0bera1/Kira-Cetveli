@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { DateField, Field, Paper } from '../../components/Paper'
 import { ResultNotice, formatDate } from '../../components/Notices'
 import { ToolPage } from '../../components/ToolPage'
-import { contractEvents, toIcs, type ContractEvent } from '../../lib/calendar/contract'
+import { contractEvents, type ContractEvent } from '../../lib/calendar/contract'
 import { downloadBlob } from '../../lib/pdf/loadFonts'
 import { parseNumber } from '../../lib/rent/money'
 import styles from './Takvim.module.css'
@@ -45,8 +45,10 @@ export default function SozlesmeTakvimi() {
       ? contractEvents({ start, end, reminderDays: Math.round(reminderDays) })
       : null
 
-  const onIcs = () => {
-    const ics = events && toIcs(events)
+  const onIcs = async () => {
+    if (!events) return
+    const { toIcs } = await import('../../lib/calendar/ics')
+    const ics = toIcs(events)
     if (ics) downloadBlob(ics, 'kira-sozlesmesi.ics', 'text/calendar')
   }
 

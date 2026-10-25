@@ -11,8 +11,8 @@
     "test:e2e": "playwright test",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "data:update": "node scripts/data-update.mjs",
-    "data:validate": "node scripts/data-validate.mjs"
+    "data:update": "tsx scripts/data-update.ts",
+    "data:validate": "tsx scripts/data-validate.ts"
   },
   "dependencies": {
     "date-fns": "^4.4.0",

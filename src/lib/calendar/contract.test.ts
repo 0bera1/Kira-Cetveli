@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { contractEvents, toIcs } from './contract'
+import { contractEvents } from './contract'
+import { toIcs } from './ics'
 
 describe('contract events', () => {
   it('creates anniversaries, reminders and the end date', () => {
