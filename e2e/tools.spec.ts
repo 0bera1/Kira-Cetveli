@@ -35,12 +35,19 @@ test('deposit refund and invalid input', async ({ page }) => {
   await expect(page.getByText('Tutar, faiz oranı ve tarihleri girin')).toBeVisible()
 })
 
-test('tax tool warns about missing yearly data', async ({ page }) => {
+test('tax tool uses the 2026 values from the data file', async ({ page }) => {
   await page.goto('/araclar/stopaj-ve-vergi')
   await page.getByLabel('Vergi yılı').selectOption('2026')
-  await expect(page.getByRole('alert')).toContainText('2026')
+  await expect(page.getByLabel('Kira geliri istisna tutarı')).toHaveValue('58000')
+  // 240.000 - 15% flat expense (36.000) - 58.000 exemption = 146.000 base, 15% bracket
+  await expect(page.getByTestId('result')).toHaveText('₺21.900,00')
   await page.getByLabel('Vergi yılı').selectOption('2025')
   await expect(page.getByTestId('result')).toContainText('₺')
+})
+
+test('late interest defaults to the statutory rate in force today', async ({ page }) => {
+  await page.goto('/araclar/gecikme-faizi')
+  await expect(page.getByLabel('Yıllık faiz oranı')).toHaveValue('31')
 })
 
 test('back-pay tool computes a total', async ({ page }) => {

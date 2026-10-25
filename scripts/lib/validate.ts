@@ -1,5 +1,5 @@
 import { crossCheck, rateForDataMonth } from '../../src/lib/rent/cpi'
-import { tufeSchema, yasalSchema } from '../../src/lib/data/schemas'
+import { tufeSchema, yasalSchema, type YasalData } from '../../src/lib/data/schemas'
 import { MAX_PLAUSIBLE_MONTHLY_PERCENT, maxMonthlyJump, missingMonths } from './evds'
 
 export interface ValidationReport {
@@ -71,4 +71,18 @@ export function validateData(tufeJson: unknown, yasalJson: unknown): ValidationR
   }
 
   return { errors, warnings }
+}
+
+/**
+ * Yearly values that only a Revenue Administration communique can provide. Returns what is missing
+ * for `year`; an empty list means the data is complete.
+ */
+export function missingYearlyValues(data: YasalData, year: number): string[] {
+  const missing: string[] = []
+  const exemption = data.kiraIstisnasi.find((r) => r.yil === year)
+  if (!exemption || exemption.tutar === null)
+    missing.push(`${year} konut kira geliri istisna tutarı`)
+  if (!data.gelirVergisiTarifesi.some((t) => t.yil === year))
+    missing.push(`${year} gelir vergisi tarifesi (ücret dışı gelirler)`)
+  return missing
 }

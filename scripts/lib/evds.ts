@@ -103,3 +103,21 @@ export function maxMonthlyJump(
 
 /** A monthly move above this is treated as a data problem (e.g. an unchained base-year change). */
 export const MAX_PLAUSIBLE_MONTHLY_PERCENT = 15
+
+/** Daily series: items carry "Tarih" as DD-MM-YYYY. Returns ISO date -> value. */
+export function parseEvdsDaily(payload: unknown, series: string): Record<string, number> {
+  const items = (payload as { items?: unknown }).items
+  if (!Array.isArray(items)) throw new Error('Unexpected EVDS response: no "items" array')
+  const field = series.replace(/\./g, '_')
+  const out: Record<string, number> = {}
+  for (const item of items as Record<string, unknown>[]) {
+    const m = typeof item.Tarih === 'string' ? /^(\d{2})-(\d{2})-(\d{4})$/.exec(item.Tarih) : null
+    const raw = item[field]
+    if (!m || raw === null || raw === undefined || raw === '') continue
+    const value = Number(raw)
+    if (!Number.isFinite(value) || value < 0) throw new Error(`Invalid value on ${item.Tarih}`)
+    out[`${m[3]}-${m[2]}-${m[1]}`] = value
+  }
+  if (Object.keys(out).length === 0) throw new Error(`No usable values for field ${field}`)
+  return out
+}

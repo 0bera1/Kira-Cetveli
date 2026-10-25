@@ -1,31 +1,72 @@
 {
   "guncelleme": "2026-10-25",
   "dogrulanmamis": true,
-  "not": "Bu dosyadaki tüm değerler dogrulanmali: true ile işaretlidir; yayına çıkmadan önce Resmî Gazete / GİB / TCMB kaynaklarından teyit edilmelidir. tutar null ise veri yoktur, kullanıcı elle girer.",
+  "not": "dogrulanmali: true olan satırlar resmî kaynaktan teyit edilmemiştir. Yasal faiz, TCMB reeskont oranından (EVDS) kanundaki formülle otomatik türetilir (npm run legal:update). Kira istisnası ve gelir vergisi tarifesi her yıl Aralık sonunda GİB tebliğiyle belirlenir; makine okunur kaynak yoktur, npm run legal:watch eksik yılı bildirir. tutar null ise veri yoktur, kullanıcı elle girer.",
   "yasalFaiz": [
     {
       "baslangic": "2024-06-01",
-      "bitis": null,
+      "bitis": "2026-07-30",
       "oran": 24,
       "kaynak": "https://www.resmigazete.gov.tr",
       "dogrulamaTarihi": null,
       "dogrulanmali": true
+    },
+    {
+      "baslangic": "2026-07-31",
+      "bitis": null,
+      "oran": 31,
+      "kaynak": "3095 sayılı Kanun m.1 (7589 sayılı Kanun m.10 ile değişik, RG 31.07.2026, 33326); TCMB reeskont oranı, EVDS TP.REESAVANS.RIO: %80 x 38.75 (2025-12-31 reeskont oranı)",
+      "dogrulamaTarihi": "2026-10-25",
+      "dogrulanmali": false
     }
   ],
   "kiraIstisnasi": [
-    { "yil": 2024, "tutar": 33000, "kaynak": "https://www.gib.gov.tr", "dogrulamaTarihi": null, "dogrulanmali": true },
-    { "yil": 2025, "tutar": 47000, "kaynak": "https://www.gib.gov.tr", "dogrulamaTarihi": null, "dogrulanmali": true },
-    { "yil": 2026, "tutar": null, "kaynak": "https://www.gib.gov.tr", "dogrulamaTarihi": null, "dogrulanmali": true }
+    {
+      "yil": 2024,
+      "tutar": 33000,
+      "kaynak": "https://www.gib.gov.tr",
+      "dogrulamaTarihi": null,
+      "dogrulanmali": true
+    },
+    {
+      "yil": 2025,
+      "tutar": 47000,
+      "kaynak": "https://www.gib.gov.tr",
+      "dogrulamaTarihi": null,
+      "dogrulanmali": true
+    },
+    {
+      "yil": 2026,
+      "tutar": 58000,
+      "kaynak": "332 Seri No'lu Gelir Vergisi Genel Tebliği (RG 31.12.2025, 33124 5. Mükerrer)",
+      "dogrulamaTarihi": "2026-10-25",
+      "dogrulanmali": false
+    }
   ],
   "gelirVergisiTarifesi": [
     {
       "yil": 2024,
       "dilimler": [
-        { "ust": 110000, "oran": 15 },
-        { "ust": 230000, "oran": 20 },
-        { "ust": 580000, "oran": 27 },
-        { "ust": 3000000, "oran": 35 },
-        { "ust": null, "oran": 40 }
+        {
+          "ust": 110000,
+          "oran": 15
+        },
+        {
+          "ust": 230000,
+          "oran": 20
+        },
+        {
+          "ust": 580000,
+          "oran": 27
+        },
+        {
+          "ust": 3000000,
+          "oran": 35
+        },
+        {
+          "ust": null,
+          "oran": 40
+        }
       ],
       "kaynak": "https://www.gib.gov.tr",
       "dogrulamaTarihi": null,
@@ -34,20 +75,77 @@
     {
       "yil": 2025,
       "dilimler": [
-        { "ust": 158000, "oran": 15 },
-        { "ust": 330000, "oran": 20 },
-        { "ust": 800000, "oran": 27 },
-        { "ust": 4300000, "oran": 35 },
-        { "ust": null, "oran": 40 }
+        {
+          "ust": 158000,
+          "oran": 15
+        },
+        {
+          "ust": 330000,
+          "oran": 20
+        },
+        {
+          "ust": 800000,
+          "oran": 27
+        },
+        {
+          "ust": 4300000,
+          "oran": 35
+        },
+        {
+          "ust": null,
+          "oran": 40
+        }
       ],
       "kaynak": "https://www.gib.gov.tr",
       "dogrulamaTarihi": null,
       "dogrulanmali": true
+    },
+    {
+      "yil": 2026,
+      "dilimler": [
+        {
+          "ust": 190000,
+          "oran": 15
+        },
+        {
+          "ust": 400000,
+          "oran": 20
+        },
+        {
+          "ust": 1000000,
+          "oran": 27
+        },
+        {
+          "ust": 5300000,
+          "oran": 35
+        },
+        {
+          "ust": null,
+          "oran": 40
+        }
+      ],
+      "kaynak": "332 Seri No'lu Gelir Vergisi Genel Tebliği (RG 31.12.2025, 33124 5. Mükerrer); ücret dışı gelirler için tarife",
+      "dogrulamaTarihi": "2026-10-25",
+      "dogrulanmali": false
     }
   ],
-  "goturuGiderOrani": { "oran": 15, "kaynak": "https://www.gib.gov.tr", "dogrulanmali": true },
+  "goturuGiderOrani": {
+    "oran": 15,
+    "kaynak": "https://www.gib.gov.tr",
+    "dogrulanmali": true
+  },
   "stopaj": [
-    { "tur": "konut", "oran": 0, "aciklama": "Konut kiralarında kiracı stopaj yapmaz.", "dogrulanmali": true },
-    { "tur": "isyeri", "oran": 20, "aciklama": "İş yeri kiralarında kiracı (tevkifat yükümlüsü ise) stopaj yapar.", "dogrulanmali": true }
+    {
+      "tur": "konut",
+      "oran": 0,
+      "aciklama": "Konut kiralarında kiracı stopaj yapmaz.",
+      "dogrulanmali": true
+    },
+    {
+      "tur": "isyeri",
+      "oran": 20,
+      "aciklama": "İş yeri kiralarında kiracı (tevkifat yükümlüsü ise) stopaj yapar.",
+      "dogrulanmali": true
+    }
   ]
 }

@@ -13,6 +13,8 @@
     "format": "prettier --write .",
     "data:update": "tsx scripts/data-update.ts",
     "data:validate": "tsx scripts/data-validate.ts",
+    "legal:update": "tsx scripts/legal-update.ts",
+    "legal:watch": "tsx scripts/legal-watch.ts",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {

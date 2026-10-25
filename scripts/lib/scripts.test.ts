@@ -7,10 +7,12 @@ import {
   formatEvdsDate,
   maxMonthlyJump,
   missingMonths,
+  parseEvdsDaily,
   parseEvdsItems,
   toMonthKey,
 } from './evds'
-import { validateData } from './validate'
+import { missingYearlyValues, validateData } from './validate'
+import { yasalSchema } from '../../src/lib/data/schemas'
 
 const read = (f: string): unknown => JSON.parse(readFileSync(`public/data/${f}`, 'utf8'))
 
@@ -119,5 +121,31 @@ describe('data validation', () => {
     expect(validateData(read('tufe.json'), bad).errors.some((e) => e.includes('overlap'))).toBe(
       true,
     )
+  })
+})
+
+describe('daily series and yearly values', () => {
+  it('parses daily items to ISO dates', () => {
+    const out = parseEvdsDaily(
+      {
+        items: [
+          { Tarih: '31-12-2025', TP_REESAVANS_RIO: '38.75000000' },
+          { Tarih: '01-01-2026', TP_REESAVANS_RIO: null },
+        ],
+      },
+      'TP.REESAVANS.RIO',
+    )
+    expect(out).toEqual({ '2025-12-31': 38.75 })
+    expect(() => parseEvdsDaily({ items: [] }, 'TP.REESAVANS.RIO')).toThrow()
+  })
+  it('reports missing yearly tax values', () => {
+    const data = yasalSchema.parse(read('yasal-oranlar.json'))
+    expect(missingYearlyValues(data, 2026)).toEqual([])
+    expect(missingYearlyValues(data, 2027)).toHaveLength(2)
+    const nullExemption = {
+      ...data,
+      kiraIstisnasi: [{ ...data.kiraIstisnasi[0], yil: 2030, tutar: null }],
+    }
+    expect(missingYearlyValues(nullExemption, 2030)[0]).toContain('istisna')
   })
 })

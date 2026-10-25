@@ -259,3 +259,12 @@ describe('real EVDS index', () => {
     expect(tufe.seri).toBe('TP.TUKFIY2025.GENEL')
   })
 })
+
+describe('shipped statutory interest', () => {
+  const yasal = yasalSchema.parse(yasalJson)
+  it('is 24 percent before and 31 percent from the 7589 law', () => {
+    expect(legalInterestOn(yasal, '2026-07-30')).toBe(24)
+    expect(legalInterestOn(yasal, '2026-07-31')).toBe(31)
+    expect(legalInterestOn(yasal, '2026-10-25')).toBe(31)
+  })
+})

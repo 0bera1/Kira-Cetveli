@@ -1,0 +1,42 @@
+name: legal-watch
+
+# Yearly tax values (rent income exemption, income tax brackets) come from a Revenue
+# Administration communique with no machine-readable source. This job only notices when they are
+# missing and opens an issue; it never edits data.
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TITLE: 'Yıllık vergi değerleri eksik'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run legal:watch
+      - name: Open or update the issue
+        if: hashFiles('issue.md') != ''
+        run: |
+          number=$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file issue.md
+          else
+            gh issue create --title "$TITLE" --body-file issue.md
+          fi
+      - name: Close the issue when everything is present
+        if: hashFiles('issue.md') == ''
+        run: |
+          number=$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number')
+          if [ -n "$number" ]; then gh issue close "$number" --comment "Eksik değerler tamamlandı."; fi

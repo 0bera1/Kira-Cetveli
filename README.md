@@ -49,6 +49,17 @@ Hiçbir yasal değer koda gömülü değildir; hepsi `public/data/` altındaki, 
 
 Konut kiralarındaki geçici %25 üst sınır uygulaması sona ermiştir; bugünkü yaklaşım TBK 344'e göre TÜFE 12 aylık ortalamadır. **Bu bilgi yayına çıkmadan önce Resmî Gazete ve TÜİK'ten bir kez daha doğrulanmalıdır.**
 
+### Yasal değerlerin güncellenmesi
+
+| Değer | Kaynak | Güncelleme |
+| --- | --- | --- |
+| TÜFE endeksi ve kira artış oranı | TCMB EVDS `TP.TUKFIY2025.GENEL` | Otomatik (`npm run data:update`), aylık PR |
+| Yasal faiz | 3095 sayılı Kanun m.1, 7589 sayılı Kanun m.10 ile değişik (RG 31.07.2026): önceki yıl 31 Aralık reeskont oranının %80'i; 30 Haziran oranı 31 Aralık'tan 5 puan veya fazla farklıysa yılın ikinci yarısında 30 Haziran oranının %80'i. Girdi: EVDS `TP.REESAVANS.RIO` | Otomatik (`npm run legal:update`), aynı aylık PR |
+| Kira geliri istisnası, gelir vergisi tarifesi | Gelir İdaresi tebliği (her yıl 31 Aralık civarı) | **Elle.** Makine okunur kaynak yok; `npm run legal:watch` eksik yılı bulursa GitHub'da issue açar, değerler eklenince kapatır |
+| Götürü gider oranı, stopaj | GVK / GİB | Elle, `dogrulanmali` işaretli |
+
+Yasal faiz türetmesi, kanun metnindeki kurala göre hazırlanmış saf bir fonksiyonla yapılır (`src/lib/rent/statutoryInterest.ts`) ve birim testlerle korunur. Kuralı değiştiren yeni bir kanun çıkarsa fonksiyon güncellenmelidir; üretilen her yeni dönem PR'da insan onayına sunulur.
+
 Uygulama çalışma zamanında EVDS'ye veya başka bir dış servise istek atmaz; yalnızca kendi alan adından `data/*.json` okur. Veri dosyalarının derleme anındaki hali sayfaya gömülür (sayfalar tam dolu üretilir), canlı dosya ise yüklendikten sonra okunur. Veri 45 günden eskiyse sonuç ekranlarında uyarı çıkar.
 
 ### Aylık otomatik güncelleme
@@ -103,7 +114,8 @@ Site Cloudflare'de (Workers statik varlıkları) `kira.beraekimci.com.tr` adresi
 
 - [x] `tufe.json` içindeki 13 açıklanan oran (Eylül 2025 - Eylül 2026) gerçek EVDS endeksinden hesaplanan değerle 0,02 puan içinde örtüştü. İsterseniz TÜİK bülteniyle ayrıca karşılaştırın.
 - [x] EVDS uç noktası, başlık, tarih biçimi ve yeni seri kodu gerçek anahtarla doğrulandı.
-- [ ] `yasal-oranlar.json`: yasal faiz oranı (24, 1 Haziran 2024), 2024/2025 kira istisnası (33.000 / 47.000), 2024/2025 gelir vergisi tarifesi, götürü gider oranı (%15), stopaj oranları hafızadan girilmiştir; Resmî Gazete ve GİB'den doğrulayın. 2026 istisna tutarı ve tarifesi eksik.
+- [ ] `yasal-oranlar.json`: 2024 ve 2025 kira istisnası ile 2024-2025 tarifeleri, götürü gider oranı (%15) ve stopaj oranları hafızadan girilmiştir; GİB ve Resmî Gazete'den doğrulayın. 2026 istisnası (58.000 TL) ve 2026 tarifesi 332 No'lu Gelir Vergisi Genel Tebliği'ne (RG 31.12.2025) göre eklendi; birincil metin okunmadı, ikincil kaynaklarla teyit edildi.
+- [ ] Yasal faiz kuralının (7589 sayılı Kanun m.10) Resmî Gazete metnini bir hukukçu okumalı; formül ikincil kaynaklardan alındı ve EVDS verisiyle sayısal olarak doğrulandı (31.12.2025: %38,75 x 0,8 = %31).
 - [ ] Konut kira artışında %25 üst sınırın sona erdiği bilgisini Resmî Gazete / TÜİK ile yayından önce bir kez daha doğrulayın.
 - [ ] Rehber sayfaları ve atıf yapılan TBK maddeleri (315, 342, 344, 347, 350, 351) bir hukukçu tarafından gözden geçirilmeli; kira bedelinin ödenmesi, tahliye taahhüdü ve ödeme ihtarı süreleri gibi konular eklenmeden önce incelenmeli.
 - [ ] Belge şablonlarının (artış bildirimi, tahliye, depozito talebi) dili hukuki incelemeden geçmeli.

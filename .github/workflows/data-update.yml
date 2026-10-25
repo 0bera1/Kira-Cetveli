@@ -29,6 +29,11 @@ jobs:
         env:
           EVDS_API_KEY: ${{ secrets.EVDS_API_KEY }}
         run: npm run data:update
+      - name: Derive statutory interest from the rediscount rate
+        if: env.HAS_KEY == 'true'
+        env:
+          EVDS_API_KEY: ${{ secrets.EVDS_API_KEY }}
+        run: npm run legal:update
       - name: Validate data files
         run: npm run data:validate
       - name: Open pull request
@@ -37,15 +42,19 @@ jobs:
         with:
           branch: data/cpi-update
           delete-branch: true
-          commit-message: 'chore(data): update CPI index'
-          title: 'chore(data): update CPI index'
+          commit-message: 'chore(data): update CPI index and statutory interest'
+          title: 'chore(data): update CPI index and statutory interest'
           author: '${{ github.repository_owner }} <${{ github.repository_owner_id }}+${{ github.repository_owner }}@users.noreply.github.com>'
           committer: '${{ github.repository_owner }} <${{ github.repository_owner_id }}+${{ github.repository_owner }}@users.noreply.github.com>'
           body: |
-            Monthly CPI index refresh from the EVDS web service.
+            Monthly refresh from the EVDS web service: CPI index and the statutory interest rate
+            (80% of the rediscount rate under Law 3095 art. 1 as amended by Law 7589).
 
             Review checklist:
             - [ ] New months match the figures announced by TUIK
+            - [ ] Any new statutory interest period matches the Official Gazette / law text
             - [ ] `npm run data:validate` shows no cross-check errors
             - [ ] Merge manually; this pull request is never merged automatically
-          add-paths: public/data/tufe.json
+          add-paths: |
+            public/data/tufe.json
+            public/data/yasal-oranlar.json
